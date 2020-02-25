@@ -1,0 +1,20 @@
+# Model config
+image_size: 50
+
+# Training config
+epochs: 10
+
+# Data config
+data_sets:
+  week0_data_train:
+    image_data: "../data/Week0/2dft.dat"
+    label_data_RAM: "../data/Week0/2dftn1.dat"
+    label_data_TID: "../data/Week0/2dftn2.dat"
+  
+  week0_data_test:
+    loader: test_data
+    image_data: "../data/Week0/2dfv.dat"
+    label_data: "../data/Week0/2dfvn.dat"
+
+data_train_split: 0.8
+data_batch_size: 32

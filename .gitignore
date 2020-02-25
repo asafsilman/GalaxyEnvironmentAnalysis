@@ -1,0 +1,13 @@
+# IDE files
+.vscode/
+
+# Environment files
+env/
+
+# Bytecode
+__pycache__/
+
+# Datafiles
+*.dat
+*.h5
+model.json
