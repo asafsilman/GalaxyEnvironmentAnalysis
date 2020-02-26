@@ -11,10 +11,6 @@ from base.data_loader import BaseDataLoader
 DEFAULT_IMAGE_SIZE = 50
 
 class DataLoaderWeek0(BaseDataLoader):
-    def __init__(self, config):
-        super().__init__(config)
-
-
     def _load_data_using_test_loader(self, data_set):
         image_data_file = data_set["image_data"]
         labal_data_file = data_set["label_data"]
@@ -134,4 +130,3 @@ if __name__=="__main__":
 
     for image, label in dl.get_test_data_set().take(5):
         print(label.shape)
-

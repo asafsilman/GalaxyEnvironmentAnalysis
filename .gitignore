@@ -11,3 +11,4 @@ __pycache__/
 *.dat
 *.h5
 model.json
+*.tar.gz
