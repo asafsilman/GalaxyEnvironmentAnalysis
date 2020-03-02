@@ -15,9 +15,9 @@ model.json
 *.jpg
 
 # LaTex files
-documents/*.aux
-documents/*.fdb_latexmk
-documents/*.fls
-documents/*.synctex.gz
-documents/*.log
-documents/*.pdf
+reports/*.aux
+reports/*.fdb_latexmk
+reports/*.fls
+reports/*.synctex.gz
+reports/*.log
+reports/*.pdf

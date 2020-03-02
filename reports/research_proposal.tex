@@ -1,0 +1,48 @@
+\documentclass[12pt, a4paper]{article}
+\setlength{\oddsidemargin}{0.5cm}
+\setlength{\evensidemargin}{0.5cm}
+\setlength{\topmargin}{-1.6cm}
+\setlength{\leftmargin}{0.5cm}
+\setlength{\rightmargin}{0.5cm}
+\setlength{\textheight}{24.00cm} 
+\setlength{\textwidth}{15.00cm}
+\parindent 0pt
+\parskip 5pt
+\pagestyle{plain}
+
+% \usepackage{graphicx}
+% \usepackage{subcaption}
+\newcommand{\namelistlabel}[1]{\mbox{#1}\hfil}
+\newenvironment{namelist}[1]{%1
+\begin{list}{}
+    {
+        \let\makelabel\namelistlabel
+        \settowidth{\labelwidth}{#1}
+        \setlength{\leftmargin}{1.1\labelwidth}
+    }
+  }{%1
+\end{list}}
+
+\title{Research Proposal}
+\author{Asaf-Tamir Silman}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{namelist}{xxxxxxxxxxxx}
+    \item[{\bf Title:}]
+        Analyzing Environmental Effects on Galaxies with Deep Learning
+    \item[{\bf Author:}]
+        Asaf-Tamir Silman
+    \item[{\bf Supervisors:}]
+        Associate Professor Kenji Bekki
+    \item[{\bf Degree:}]
+        Master of Professional Engineering - Software Engineering Spec.
+    \end{namelist}
+
+\section{Project Summary}
+The impact of environmental effects on galaxies can have significant
+effect on the galaxy morphology. 
+
+\end{document}
