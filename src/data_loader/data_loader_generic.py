@@ -22,16 +22,28 @@ class DataLoaderGeneric(BaseDataLoader):
         for data_file_info in data_files:
             data_file_path = data_file_info.get("file")
             image_file_name = data_file_info.get("image_file_name", "m1.dir/2dft.dat")
-            label_file_name = data_file_info.get("label_file_name", "m1.dir/2dftn1.dat")
+            label_file_names = data_file_info.get("label_file_names", "m1.dir/2dftn1.dat")
+            if isinstance(label_file_names, str):
+                label_file_names = [label_file_names]
+
 
             if Path(data_file_path).exists():
                 with tarfile.open(data_file_path) as tar:
                     # Extract data files (image and labels)
-                    label_file = tar.extractfile(label_file_name)
+                    label_files = []
+
+                    for label_file_name in label_file_names:
+                        label_files.append(tar.extractfile(label_file_name))
                     image_file = tar.extractfile(image_file_name)
 
                     # Load data using np.loadtxt
-                    label_data = np.loadtxt(label_file, dtype=np.float32)
+                    label_data_list = []
+                    for label_file in label_files:
+                        label_data = np.loadtxt(label_file, dtype=np.float32)
+                        n_rows = label_data.shape[0]
+                        label_data = label_data.reshape(n_rows, 1)
+                        label_data_list.append(label_data)
+
                     image_data = np.loadtxt(image_file, dtype=np.float32)
 
                     # Count number of rows

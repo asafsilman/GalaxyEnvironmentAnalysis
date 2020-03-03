@@ -6,16 +6,23 @@ epochs: 100
 
 # Data config
 data_raw_path: "data/raw"
+data_interim_path: "data/interim"
 data_processed_path: "data/processed"
+
+data_labels:
+  0: TID
+  1: RPS
+  2: ISO
 
 data_files:
   - file: "A.m1.dir.tar.gz"
-    cast_label_as: categorical
-    num_classes: 2
-    label_start: 0
+    data_set_type: categorical
+    label_file_names: 
+      - m1.dir/2dftn1.dat
+      - m1.dir/2dftn2.dat
   - file: "A.i.m1.dir.tar.gz"
-    cast_label_as: categorical
-    num_classes: 1
+    data_set_type: categorical
+    label_file_names: m1.dir/2dftn1.dat
     label_start: 2
 
 # Model training configuration

@@ -12,6 +12,7 @@ __pycache__/
 *.h5
 model.json
 *.tar.gz
+*.png
 *.jpg
 
 # LaTex files

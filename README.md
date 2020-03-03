@@ -4,4 +4,4 @@ This repository contains the codebase for analysing the surrounding environment 
 
 ## Project Structure
 
-The structure of the project is based on [This Project](https://github.com/MrGemy95/Tensorflow-Project-Template)
+The structure of the project is based on [This Project](https://drivendata.github.io/cookiecutter-data-science/#data-is-immutable)
