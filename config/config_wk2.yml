@@ -30,3 +30,6 @@ data_train_split: 0.8
 data_validation_split: 0.8
 data_batch_size: 32
 data_num_classes: 3
+
+model_directory: "models"
+model_name: 2-Model

@@ -5,6 +5,7 @@ import click
 from src.utils.load_config import load_config
 from src.data.make_data_set import make_data_set
 from src.data.split_data_set import split_data_set
+from src.models.train_model import train_model
 
 logger = logging.getLogger(__name__)
 
@@ -44,25 +45,32 @@ def clean(ctx):
 @cli.command()
 @click.pass_context
 @click.argument('config-file', type=click.Path(exists=True))
-def dataprep(ctx, config_file):
+def data_prep(ctx, config_file):
     config = load_config(click.format_filename(config_file))
     make_data_set(config)
     
 @cli.command()
 @click.pass_context
 @click.argument('config-file', type=click.Path(exists=True))
-def datasplit(ctx, config_file):
+def data_split(ctx, config_file):
     config = load_config(click.format_filename(config_file))
     split_data_set(config)
 
 @cli.command()
 @click.pass_context
 @click.argument('config-file', type=click.Path(exists=True))
-def dataprepsplit(ctx, config_file):
+def data_prep_split(ctx, config_file):
     config = load_config(click.format_filename(config_file))
     make_data_set(config)
     split_data_set(config)
 
+@cli.command()
+@click.pass_context
+@click.argument('config-file', type=click.Path(exists=True))
+@click.option('--new-model/--load-model', default=False)
+def train(ctx, config_file, new_model):
+    config = load_config(click.format_filename(config_file))
+    train_model(config, new_model)
 
 
 if __name__ == '__main__':
