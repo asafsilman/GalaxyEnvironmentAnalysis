@@ -10,11 +10,11 @@ __pycache__/
 # Datafiles
 *.dat
 *.h5
-model.json
 *.tar.gz
 *.png
 *.jpg
 logs/*
+models/*.json
 
 
 # LaTex files

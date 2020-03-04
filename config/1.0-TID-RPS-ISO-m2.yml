@@ -1,5 +1,6 @@
 # Model config
 image_size: 50
+model_name: TID-RPS-ISO
 
 # Training config
 epochs: 100
@@ -15,6 +16,9 @@ data_labels:
   2: ISO
 
 data_files:
+  - file: "A.t.m1.dir.tar.gz"
+    data_set_type: categorical
+    label_start: 0
   - file: "A.r.m2.dir.tar.gz"
     data_set_type: categorical
     label_start: 1
@@ -29,6 +33,5 @@ data_batch_size: 32
 data_num_classes: 2
 
 model_directory: "models"
-model_name: 2-Model
 
 log_dir: "logs/fit"

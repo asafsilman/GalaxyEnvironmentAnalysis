@@ -1,7 +1,6 @@
 import tensorflow as tf
 import numpy as np
 
-from keras.preprocessing.image import ImageDataGenerator
 import os
 
 from pathlib import Path
@@ -15,35 +14,7 @@ def load_data_set(config, data_dir):
     num_classes = config.get('data_num_classes', 1)
 
     class_names = np.array([item.name for item in data_dir.glob('*')])
-    assert len(class_names) == num_classes, "Error len(class_names) != num_classes"
-
-    # def gen():
-    #     data_generator = ImageDataGenerator(
-    #         rescale=1./255,
-    #         zoom_range=0.2
-    #     )
-
-    #     train_generator = data_generator.flow_from_directory(
-    #         data_dir,
-    #         target_size=(image_size,image_size),
-    #         color_mode='grayscale',
-    #         shuffle=False
-    #     )
-
-    #     while True:
-    #         for image, label in train_generator:
-    #             for i in range(image.shape[0]):
-    #                 yield image[i], label[i]
-
-    
-    # data_set = tf.data.Dataset.from_generator(
-    #     gen,
-    #     output_types=(tf.float32, tf.float32),
-    #     output_shapes=(
-    #         [image_size, image_size, 1],
-    #         [num_classes]
-    #     )
-    # )
+    assert len(class_names) == num_classes, f"Error len(class_names) != {num_classes}"
 
     def decode_img(img):
         # convert the compressed string to a 3D uint8 tensor

@@ -54,10 +54,11 @@ def save_model(model, model_name, model_directory):
 def train_model(config, new_model: bool, save_model_flag: bool):
     image_size = config.get('image_size', DEFAULT_IMAGE_SIZE)
     num_classes = config.get('data_num_classes', 1)
-    data_processed_path = Path(config.get('data_processed_path', 'data/processed'))
 
     model_directory = Path(config.get('model_directory', 'models'))
     model_name = config.get('model_name', 'unnamed_model')
+
+    data_processed_path = Path(config.get('data_processed_path', 'data/processed')) / model_name
 
     log_dir = Path(config.get('log_dir', 'logs/fit'))
 

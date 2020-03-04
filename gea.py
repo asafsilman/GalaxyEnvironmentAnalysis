@@ -3,23 +3,14 @@ from pathlib import Path
 
 import click
 from src.utils.load_config import load_config
+from src.utils.rm_tree import rm_tree
+
 from src.data.make_data_set import make_data_set
 from src.data.split_data_set import split_data_set
 from src.data.move_data import move_data
 from src.models.train_model import train_model
 
 logger = logging.getLogger(__name__)
-
-def rm_tree(pth: Path, depth: int=0):
-    for child in pth.iterdir():
-        if child.is_file():
-            logger.debug(f"Deleting file: {child}")
-            child.unlink()
-        else:
-            rm_tree(child, depth+1)
-    if depth > 0:
-        logger.debug(f"Deleting directory: {pth}")
-        pth.rmdir()
 
 @click.group()
 @click.option('--debug/--no-debug', default=False)
@@ -33,14 +24,18 @@ def cli(ctx, debug):
 @cli.command()
 @click.pass_context
 def clean(ctx):
-    processed_data = Path(__file__).parent.joinpath("data", "processed")  
-    interim_data = Path(__file__).parent.joinpath("data", "interim")  
-    
+    processed_data = Path(__file__).parent / "data" / "processed"
+    interim_data = Path(__file__).parent / "data" / "interim"
+    log_directory = Path(__file__).parent / "logs"
+
     logger.info(f'Cleaning {processed_data} directory')
     rm_tree(processed_data)
 
     logger.info(f'Cleaning {interim_data} directory')
     rm_tree(interim_data)
+
+    logger.info(f'Cleaning {log_directory} directory')
+    rm_tree(log_directory)
 
 
 @cli.command()
