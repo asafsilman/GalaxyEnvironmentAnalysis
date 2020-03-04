@@ -1,6 +1,6 @@
 # Model config
 image_size: 50
-model_name: TID-RPS-ISO-m2
+model_name: TID-RPS-ISO-m1
 
 # Training config
 epochs: 1000
@@ -19,13 +19,7 @@ data_files:
   - file: "A.t.m1.dir.tar.gz"
     data_set_type: categorical
     label_start: 0
-  - file: "A.t.m2.dir.tar.gz"
-    data_set_type: categorical
-    label_start: 0
   - file: "A.r.m1.dir.tar.gz"
-    data_set_type: categorical
-    label_start: 1
-  - file: "A.r.m2.dir.tar.gz"
     data_set_type: categorical
     label_start: 1
   - file: "A.i.m1.dir.tar.gz"
