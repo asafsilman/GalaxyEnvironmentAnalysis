@@ -3,7 +3,7 @@ image_size: 50
 model_name: RPS-TID
 
 # Training config
-epochs: 100
+epochs: 1000
 
 # Data config
 data_raw_path: "data/raw"
