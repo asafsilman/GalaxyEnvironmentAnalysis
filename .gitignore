@@ -14,6 +14,8 @@ model.json
 *.tar.gz
 *.png
 *.jpg
+logs/*
+
 
 # LaTex files
 reports/*.aux

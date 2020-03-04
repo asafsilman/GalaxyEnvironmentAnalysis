@@ -1,3 +1,5 @@
+import logging
+import datetime
 from pathlib import Path
 
 import tensorflow as tf
@@ -9,6 +11,8 @@ from tensorflow.keras.optimizers import Adadelta
 from src.data.load_data_set import load_data_set
 
 DEFAULT_IMAGE_SIZE = 50
+
+logger = logging.getLogger(__name__)
 
 def get_new_model(image_size, num_classes):
     model = Sequential()
@@ -47,7 +51,7 @@ def save_model(model, model_name, model_directory):
     
     model.save_weights(str(model_weights))
 
-def train_model(config, new_model: bool):
+def train_model(config, new_model: bool, save_model_flag: bool):
     image_size = config.get('image_size', DEFAULT_IMAGE_SIZE)
     num_classes = config.get('data_num_classes', 1)
     data_processed_path = Path(config.get('data_processed_path', 'data/processed'))
@@ -55,29 +59,47 @@ def train_model(config, new_model: bool):
     model_directory = Path(config.get('model_directory', 'models'))
     model_name = config.get('model_name', 'unnamed_model')
 
+    log_dir = Path(config.get('log_dir', 'logs/fit'))
+
     if new_model:
+        logger.info("Creating new model")
         model = get_new_model(image_size, num_classes)
     else:
+        logger.info(f"Loading model {model_name} from {model_directory}")
         model = load_model(model_name, model_directory)
 
     train_data_set = load_data_set(config, data_processed_path/'train')
     validation_data_set = load_data_set(config, data_processed_path/'validate')
 
-    epochs = min(config.get("epochs", 100), 10)
+    epochs = config.get("epochs", 100)
 
     model.compile(
         loss=tf.keras.losses.CategoricalCrossentropy(from_logits=True),
         optimizer=Adadelta(),
-        metrics=['MSE']
+        metrics=['MSE', 'accuracy']
     )
     
-    model.fit(
-        train_data_set,
-        steps_per_epoch=50,
-        epochs=epochs,
-        validation_data=validation_data_set,
-        validation_steps=50,
-        verbose=1,
-    )
+    # Setup tensorboard logs
+    today_date_time_str = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+    log_dir=log_dir / f"{model_name}-{today_date_time_str}"
 
-    save_model(model, model_name, model_directory)
+    tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
+
+    try:
+        model.fit(
+            train_data_set,
+            steps_per_epoch=50,
+            epochs=epochs,
+            validation_data=validation_data_set,
+            validation_steps=50,
+            verbose=1,
+            callbacks=[tensorboard_callback]
+        )
+    except KeyboardInterrupt:
+        logger.error('Got Keyboard Interupt, stopping training')
+
+    if save_model_flag:
+        logger.info(f"Saving model as {model_name}")
+        save_model(model, model_name, model_directory)
+    else:
+        logger.info("Discarding training. save_model_flag set to False")
