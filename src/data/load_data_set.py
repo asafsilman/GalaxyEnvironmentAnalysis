@@ -13,7 +13,9 @@ def load_data_set(config, data_dir):
     batch_size = config.get("data_batch_size", 32)
     num_classes = config.get('data_num_classes', 1)
 
-    class_names = np.array([item.name for item in data_dir.glob('*')])
+    class_names = np.array(
+        sorted([item.name for item in data_dir.glob('*')]) # Path.glob can have different orderings on different systems
+    )
     assert len(class_names) == num_classes, f"Error len(class_names) != {num_classes}"
 
     def decode_img(img):

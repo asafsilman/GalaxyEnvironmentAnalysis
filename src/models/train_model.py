@@ -8,6 +8,8 @@ from tensorflow.keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2
 from tensorflow.keras.metrics import CosineSimilarity
 from tensorflow.keras.optimizers import Adadelta
 
+from tensorflow.python.eager import profiler
+
 from src.data.load_data_set import load_data_set
 
 DEFAULT_IMAGE_SIZE = 50
@@ -60,8 +62,6 @@ def train_model(config, new_model: bool, save_model_flag: bool):
 
     data_processed_path = Path(config.get('data_processed_path', 'data/processed')) / model_name
 
-    log_dir = Path(config.get('log_dir', 'logs/fit'))
-
     if new_model:
         logger.info("Creating new model")
         model = get_new_model(image_size, num_classes)
@@ -82,13 +82,18 @@ def train_model(config, new_model: bool, save_model_flag: bool):
     
     callbacks = []
 
-    if config.get('enable_tensorboard', False):
+    enable_tensorboard = config.get('enable_tensorboard', False)
+    if enable_tensorboard:
         # Setup tensorboard logs
+        log_dir = Path(config.get('log_dir', 'logs/fit'))
+        
         today_date_time_str = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         log_dir=log_dir / f"{model_name}-{today_date_time_str}"
         callbacks.append(
-            tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
+            tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1, profile_batch=0)
         )
+
+        profiler.start()
     if config.get('enable_earlystopping', False):
         callbacks.append(
             tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=5)
@@ -112,3 +117,7 @@ def train_model(config, new_model: bool, save_model_flag: bool):
         save_model(model, model_name, model_directory)
     else:
         logger.info("Discarding training. save_model_flag set to False")
+
+    if enable_tensorboard:
+        profiler_result = profiler.stop()
+        profiler.save(str(log_dir), profiler_result)
