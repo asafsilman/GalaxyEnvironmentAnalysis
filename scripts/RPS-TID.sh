@@ -4,8 +4,8 @@
 #SBATCH -c 10      # cores requested
 #SBATCH --mem=180G  # memory in Mb
 #SBATCH --partition=mlgpu
-#SBATCH -o outfile-RPS-RID  # send stdout to outfile
-#SBATCH -e errfile-RPS-RID  # send stderr to errfile
+#SBATCH -o outfile-RPS-TID  # send stdout to outfile
+#SBATCH -e errfile-RPS-TID  # send stderr to errfile
 
 cd ~/GalaxyEnvironmentAnalysis
 source env/bin/activate
