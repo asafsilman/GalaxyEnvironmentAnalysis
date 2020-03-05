@@ -9,5 +9,4 @@
 
 cd ~/GalaxyEnvironmentAnalysis
 source env/bin/activate
-python gea.py --debug data-prep-split config/1.0-TID-RPS-ISO-m1.yml
 python gea.py --debug train config/1.0-TID-RPS-ISO-m1.yml --new-model
