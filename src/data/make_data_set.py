@@ -6,6 +6,8 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
+from src.utils.rm_tree import rm_tree
+
 logger = logging.getLogger(__name__)
 
 DEFAULT_IMAGE_SIZE = 50
@@ -16,6 +18,8 @@ def make_data_set(config):
 
     assert data_raw_path.is_dir(), 'Raw data path is not a valid directory'
     assert data_interim_path.is_dir(), 'Processed data path is not a valid directory'
+
+    rm_tree(data_interim_path)
 
     data_files = config.get('data_files', [])
     data_labels = config.get('data_labels', None)

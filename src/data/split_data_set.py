@@ -18,6 +18,10 @@ def split_data_set(config, seed=None):
 
     data_interim_path = Path(config.get('data_interim_path', 'data/interim'))
     data_processed_path = Path(config.get('data_processed_path', 'data/processed')) / model_name
+    
+    if data_processed_path.exists():
+        logger.info("Detected that there already exists a directory with processed data. Replacing with new data")
+        rm_tree(data_processed_path)
 
     data_train_split = config.get('data_train_split', 0.8)
     data_validation_split = config.get('data_validation_split', 0.8)
