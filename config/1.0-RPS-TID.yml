@@ -3,7 +3,9 @@ image_size: 50
 model_name: RPS-TID
 
 # Training config
-epochs: 1000
+epochs: 20
+enable_tensorboard: True
+enable_earlystopping: True
 
 # Data config
 data_raw_path: "data/raw"

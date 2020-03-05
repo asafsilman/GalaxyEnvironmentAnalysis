@@ -29,7 +29,7 @@ def load_data_set(config, data_dir):
         parts = tf.strings.split(file_path, os.path.sep)
         # The second to last is the class-directory
 
-        return parts[-2] == class_names
+        return tf.cast(parts[-2] == class_names, tf.float32)
     
     def process_path(file_path):
         label = get_label(file_path)

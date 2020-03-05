@@ -75,16 +75,24 @@ def train_model(config, new_model: bool, save_model_flag: bool):
     epochs = config.get("epochs", 100)
 
     model.compile(
-        loss=tf.keras.losses.CategoricalCrossentropy(from_logits=True),
+        loss=tf.keras.losses.categorical_crossentropy,
         optimizer=Adadelta(),
         metrics=['MSE', 'accuracy']
     )
     
-    # Setup tensorboard logs
-    today_date_time_str = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-    log_dir=log_dir / f"{model_name}-{today_date_time_str}"
+    callbacks = []
 
-    tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
+    if config.get('enable_tensorboard', False):
+        # Setup tensorboard logs
+        today_date_time_str = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        log_dir=log_dir / f"{model_name}-{today_date_time_str}"
+        callbacks.append(
+            tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
+        )
+    if config.get('enable_earlystopping', False):
+        callbacks.append(
+            tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=5)
+        )
 
     try:
         model.fit(
@@ -94,7 +102,7 @@ def train_model(config, new_model: bool, save_model_flag: bool):
             validation_data=validation_data_set,
             validation_steps=50,
             verbose=1,
-            callbacks=[tensorboard_callback]
+            callbacks=callbacks
         )
     except KeyboardInterrupt:
         logger.error('Got Keyboard Interupt, stopping training')

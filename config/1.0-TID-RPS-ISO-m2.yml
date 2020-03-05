@@ -4,6 +4,8 @@ model_name: TID-RPS-ISO-m2
 
 # Training config
 epochs: 1000
+enable_tensorboard: True
+enable_earlystopping: True
 
 # Data config
 data_raw_path: "data/raw"
