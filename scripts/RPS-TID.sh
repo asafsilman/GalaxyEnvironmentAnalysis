@@ -1,8 +1,7 @@
 #!/bin/sh
 #SBATCH -N 1      # nodes requested
 #SBATCH -n 1      # tasks requested
-#SBATCH -c 10      # cores requested
-#SBATCH --mem=180G  # memory in Mb
+#SBATCH --mem=4G  # memory in Mb
 #SBATCH --partition=mlgpu
 #SBATCH -o outfile-RPS-TID  # send stdout to outfile
 #SBATCH -e errfile-RPS-TID  # send stderr to errfile
