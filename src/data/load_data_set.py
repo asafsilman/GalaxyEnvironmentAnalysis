@@ -2,11 +2,14 @@ import tensorflow as tf
 import numpy as np
 
 import os
+import logging
 
 from pathlib import Path
 
 AUTOTUNE = tf.data.experimental.AUTOTUNE
 DEFAULT_IMAGE_SIZE = 50
+
+logger = logging.getLogger(__name__)
 
 def load_data_set(config, data_dir):
     image_size = config.get('image_size', DEFAULT_IMAGE_SIZE)
@@ -17,6 +20,7 @@ def load_data_set(config, data_dir):
         sorted([item.name for item in data_dir.glob('*')]) # Path.glob can have different orderings on different systems
     )
     assert len(class_names) == num_classes, f"Error len(class_names) != {num_classes}"
+    logger.debug(f"class names is ({class_names})")
 
     def decode_img(img):
         # convert the compressed string to a 3D uint8 tensor
