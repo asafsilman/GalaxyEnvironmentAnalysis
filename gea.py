@@ -23,7 +23,8 @@ def cli(ctx, debug):
 
 @cli.command()
 @click.pass_context
-def clean(ctx):
+@click.option('--all-files', default=False)
+def clean(ctx, all_files):
     processed_data = Path(__file__).parent / "data" / "processed"
     interim_data = Path(__file__).parent / "data" / "interim"
     log_directory = Path(__file__).parent / "logs"
@@ -34,8 +35,9 @@ def clean(ctx):
     logger.info(f'Cleaning {interim_data} directory')
     rm_tree(interim_data)
 
-    logger.info(f'Cleaning {log_directory} directory')
-    rm_tree(log_directory)
+    if all_files:
+        logger.info(f'Cleaning {log_directory} directory')
+        rm_tree(log_directory)
 
 
 @cli.command()
