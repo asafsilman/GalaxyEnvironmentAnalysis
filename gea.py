@@ -50,9 +50,10 @@ def data_prep(ctx, config_file):
 @cli.command()
 @click.pass_context
 @click.argument('config-file', type=click.Path(exists=True))
-def data_split(ctx, config_file):
+@click.argument('seed', default=None, required=False)
+def data_split(ctx, config_file, seed):
     config = load_config(click.format_filename(config_file))
-    split_data_set(config)
+    split_data_set(config, seed)
 
 @cli.command()
 @click.pass_context
@@ -68,10 +69,11 @@ def data_move(ctx, config_file, directory):
 @cli.command()
 @click.pass_context
 @click.argument('config-file', type=click.Path(exists=True))
-def data_prep_split(ctx, config_file):
+@click.argument('seed', default=None, required=False)
+def data_prep_split(ctx, config_file, seed):
     config = load_config(click.format_filename(config_file))
     make_data_set(config)
-    split_data_set(config)
+    split_data_set(config, seed)
 
 @cli.command()
 @click.pass_context

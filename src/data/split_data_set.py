@@ -9,7 +9,11 @@ from src.utils.rm_tree import rm_tree
 logger = logging.getLogger(__name__)    
 
 # Assume that the file names that are hashed are sufficiently random
-def split_data_set(config):
+def split_data_set(config, seed=None):
+    if seed:
+        logger.info(f"Using random seed={seed}")
+        random.seed(seed)
+
     model_name = config.get('model_name', 'unnamed_model')
 
     data_interim_path = Path(config.get('data_interim_path', 'data/interim'))

@@ -20,7 +20,7 @@ def load_data_set(config, data_dir):
         sorted([item.name for item in data_dir.glob('*')]) # Path.glob can have different orderings on different systems
     )
     assert len(class_names) == num_classes, f"Error len(class_names) != {num_classes}"
-    logger.debug(f"class names is ({class_names})")
+    logger.debug(f"class names are: {class_names}")
 
     def decode_img(img):
         # convert the compressed string to a 3D uint8 tensor
