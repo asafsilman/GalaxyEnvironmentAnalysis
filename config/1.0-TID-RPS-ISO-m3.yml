@@ -24,6 +24,9 @@ data_files:
   - file: "A.t.m2.dir.tar.gz"
     data_set_type: categorical
     label_start: 0
+  - file: "A.t.m3.dir.tar.gz"
+    data_set_type: categorical
+    label_start: 0
   - file: "A.r.m1.dir.tar.gz"
     data_set_type: categorical
     label_start: 1
