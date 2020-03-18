@@ -1,6 +1,6 @@
 # Model config
 image_size: 50
-model_name: TID-RPS-ISO-m3
+model_name: 1_1-TID-RPS-ISO-m3
 
 # Training config
 epochs: 1000
