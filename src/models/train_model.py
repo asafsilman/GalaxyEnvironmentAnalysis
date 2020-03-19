@@ -16,12 +16,12 @@ DEFAULT_IMAGE_SIZE = 50
 
 logger = logging.getLogger(__name__)
 
-def get_new_model(image_size, num_classes):
+def get_new_model(image_size, num_classes, channels=1):
     model = Sequential()
 
     model.add(Conv2D(32, kernel_size=(3, 3),
                     activation='relu',
-                    input_shape=(image_size, image_size, 1)))
+                    input_shape=(image_size, image_size, channels)))
     model.add(Conv2D(64, (3, 3), activation='relu'))
     model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(Dropout(0.25))
@@ -64,7 +64,11 @@ def train_model(config, new_model: bool, save_model_flag: bool):
 
     if new_model:
         logger.info("Creating new model")
-        model = get_new_model(image_size, num_classes)
+        model_type = config.get("model_type", "1_channel")
+        if model_type == "1_channel":
+            model = get_new_model(image_size, num_classes, channels=1)
+        elif model_type == "2_channel":
+            model = get_new_model(image_size, num_classes, channels=3) # tensorflow only accepts 1, 3 or 4 channel images
     else:
         logger.info(f"Loading model {model_name} from {model_directory}")
         model = load_model(model_name, model_directory)
