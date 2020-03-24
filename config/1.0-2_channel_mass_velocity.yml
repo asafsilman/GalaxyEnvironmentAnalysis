@@ -20,41 +20,41 @@ data_labels:
 data_files:
   # Tidal inteaction data
   - file_1: "A.t.m1.dir.tar.gz"
-    file_2: "A.ts.m1.dir.tar.gz"
+    file_2: "A.t.m1v.dir.tar.gz"
     data_set_type: categorical_2_channel
     label_start: 0
   - file_1: "A.t.m2.dir.tar.gz"
-    file_2: "A.ts.m2.dir.tar.gz"
+    file_2: "A.t.m2v.dir.tar.gz"
     data_set_type: categorical_2_channel
     label_start: 0
   - file_1: "A.t.m3.dir.tar.gz"
-    file_2: "A.ts.m3.dir.tar.gz"
+    file_2: "A.t.m3v.dir.tar.gz"
     data_set_type: categorical_2_channel
     label_start: 0
   # Ram pressure stripping data
   - file_1: "A.r.m1.dir.tar.gz"
-    file_2: "A.rs.m1.dir.tar.gz"
+    file_2: "A.r.m1v.dir.tar.gz"
     data_set_type: categorical_2_channel
     label_start: 1
   - file_1: "A.r.m2.dir.tar.gz"
-    file_2: "A.rs.m2.dir.tar.gz"
+    file_2: "A.r.m2v.dir.tar.gz"
     data_set_type: categorical_2_channel
     label_start: 1
   - file_1: "A.r.m3.dir.tar.gz"
-    file_2: "A.rs.m3.dir.tar.gz"
+    file_2: "A.r.m3v.dir.tar.gz"
     data_set_type: categorical_2_channel
     label_start: 1
   # Isolated data
   - file_1: "A.i.m1.dir.tar.gz"
-    file_2: "A.is.m1.dir.tar.gz"
+    file_2: "A.i.m1v.dir.tar.gz"
     data_set_type: categorical_2_channel
     label_start: 2
   - file_1: "A.i.m2.dir.tar.gz"
-    file_2: "A.is.m2.dir.tar.gz"
+    file_2: "A.i.m2v.dir.tar.gz"
     data_set_type: categorical_2_channel
     label_start: 2
   - file_1: "A.i.m3.dir.tar.gz"
-    file_2: "A.is.m3.dir.tar.gz"
+    file_2: "A.i.m3v.dir.tar.gz"
     data_set_type: categorical_2_channel
     label_start: 2
   
@@ -66,6 +66,6 @@ data_num_classes: 3
 
 model_type: "2_channel"
 model_directory: "models"
-model_name: 2-Model
+model_name: 2_channel_mass_velocity
 
 log_dir: "logs/fit"
