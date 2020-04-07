@@ -16,15 +16,23 @@ def load_data_set(config, data_dir):
     batch_size = config.get("data_batch_size", 32)
     num_classes = config.get('data_num_classes', 1)
 
+    model_type = config.get("model_type", "1_channel")
+    channels = 1 # initialisation
+
+    if model_type=="2_channel":
+        channels=3
+    else:
+        channels=1
+
     class_names = np.array(
         sorted([item.name for item in data_dir.glob('*')]) # Path.glob can have different orderings on different systems
     )
     assert len(class_names) == num_classes, f"Error len(class_names) != {num_classes}"
     logger.debug(f"class names are: {class_names}")
 
-    def decode_img(img):
+    def decode_img(img, channels=1):
         # convert the compressed string to a 3D uint8 tensor
-        img = tf.image.decode_png(img, channels=3)
+        img = tf.image.decode_png(img, channels=channels)
         # Use `convert_image_dtype` to convert to floats in the [0,1] range.
         img = tf.image.convert_image_dtype(img, tf.float32)
         # resize the image to the desired size.
@@ -42,7 +50,7 @@ def load_data_set(config, data_dir):
         
         # load the raw data from the file as a string
         img = tf.io.read_file(file_path)
-        img = decode_img(img)
+        img = decode_img(img, channels)
         return img, label
 
     list_ds = tf.data.Dataset.list_files(str(data_dir/'*/*'))
