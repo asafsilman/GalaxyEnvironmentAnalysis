@@ -121,7 +121,9 @@ def make_data_set_categorical(data_file_info, data_file_path, data_interim_path,
 def make_data_set_categorical_2_channel(data_file_info, data_file_path_1, data_file_path_2, data_interim_path, data_labels):
     image_size = data_file_info.get("image_size", DEFAULT_IMAGE_SIZE)
 
-    image_file_name = data_file_info.get("image_file_name", "m1.dir/2dft.dat")
+    image_file_name_1 = data_file_info.get("image_file_name_1", "m1.dir/2dft.dat")
+    image_file_name_2 = data_file_info.get("image_file_name_2", "m1.dir/2dft.dat")
+    
     label_file_name = data_file_info.get("label_file_name", "m1.dir/2dftn1.dat")
 
     label_start = data_file_info.get("label_start", 0)
@@ -131,15 +133,15 @@ def make_data_set_categorical_2_channel(data_file_info, data_file_path_1, data_f
         logger.debug(f"Openning tar archive {data_file_path_2}")
         with tarfile.open(data_file_path_2) as archive_2:
             # Extract data files (image and labels)
-            logger.debug(f"Reading image data in archive with path {image_file_name}")
-            image_file_1 = archive.extractfile(image_file_name)
+            logger.debug(f"Reading image data in archive_1 with path {image_file_name_1}")
+            image_file_1 = archive.extractfile(image_file_name_1)
             image_data_1 = np.loadtxt(image_file_1, dtype=np.float32)
 
-            logger.debug(f"Reading image data in archive_2 with path {image_file_name}")
-            image_file_2 = archive_2.extractfile(image_file_name)
+            logger.debug(f"Reading image data in archive_2 with path {image_file_name_2}")
+            image_file_2 = archive_2.extractfile(image_file_name_2)
             image_data_2 = np.loadtxt(image_file_2, dtype=np.float32)
 
-            logger.debug(f"Loading label data in archive with path {label_file_name}")
+            logger.debug(f"Loading label data in archive_1 with path {label_file_name}")
             label_file = archive.extractfile(label_file_name)
             label_data = np.loadtxt(label_file, dtype=np.float32)
 
