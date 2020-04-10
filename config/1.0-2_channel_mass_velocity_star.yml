@@ -51,10 +51,12 @@ data_files:
     label_start: 2
   - file_1: "A.i.m2v.dir.tar.gz"
     file_2: "A.is.m2.dir.tar.gz"
+    image_file_name_1: m1v.dir/2dft.dat
     data_set_type: categorical_2_channel
     label_start: 2
   - file_1: "A.i.m3v.dir.tar.gz"
     file_2: "A.is.m3.dir.tar.gz"
+    image_file_name_1: m1v.dir/2dft.dat
     data_set_type: categorical_2_channel
     label_start: 2
   
