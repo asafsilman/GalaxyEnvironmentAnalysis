@@ -81,7 +81,7 @@ def train_model(config, new_model: bool, save_model_flag: bool):
     model.compile(
         loss=tf.keras.losses.categorical_crossentropy,
         optimizer=Adadelta(),
-        metrics=['MSE', 'accuracy']
+        metrics=['MSE', 'accuracy', 'AUC']
     )
     
     callbacks = []
