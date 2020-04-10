@@ -1,7 +1,7 @@
 #!/bin/sh
 #SBATCH -N 1      # nodes requested
 #SBATCH -n 1      # tasks requested
-#SBATCH --mem=4G  # memory in Mb
+#SBATCH --mem=40G  # memory in Mb
 #SBATCH --partition=mlgpu
 #SBATCH -o outfile-TID-RPS-ISO-m2  # send stdout to outfile
 #SBATCH -e errfile-TID-RPS-ISO-m2  # send stderr to errfile
