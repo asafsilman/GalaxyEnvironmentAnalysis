@@ -62,7 +62,11 @@ def make_data_set_categorical(data_file_info, data_file_path, data_interim_path,
     image_size = data_file_info.get("image_size", DEFAULT_IMAGE_SIZE)
 
     image_file_name = data_file_info.get("image_file_name", "m1.dir/2dft.dat")
-    label_file_names = data_file_info.get("label_file_names", "m1.dir/2dftn1.dat")
+    label_file_names = data_file_info.get("label_file_name", # try get value in this key
+        data_file_info.get("label_file_names", # if it doesnt exist, try this key
+            "m1.dir/2dftn1.dat" # otherwise use the default value
+        )
+    )
     if isinstance(label_file_names, str):
         label_file_names = [label_file_names]
 
