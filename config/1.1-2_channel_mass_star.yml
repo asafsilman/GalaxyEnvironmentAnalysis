@@ -65,10 +65,6 @@ data_files:
     file_2: "A.is.m3.dir.tar.gz"
     data_set_type: categorical_2_channel
     label_start: 2
-  - file_1: "A.i.m5.dir.tar.gz"
-    file_2: "A.is.m5.dir.tar.gz"
-    data_set_type: categorical_2_channel
-    label_start: 2
   
 # Model training configuration
 data_train_split: 0.8
