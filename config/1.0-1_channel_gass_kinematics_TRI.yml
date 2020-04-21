@@ -17,32 +17,36 @@ data_labels:
   2: ISO
 
 data_files:
-  - file: "A.t.m1.dir.tar.gz"
+  - file: "A.t.m1v.dir.tar.gz"
     data_set_type: categorical
     label_start: 0
-  - file: "A.t.m2.dir.tar.gz"
+  - file: "A.t.m2v.dir.tar.gz"
     data_set_type: categorical
     label_start: 0
-  - file: "A.t.m3.dir.tar.gz"
+  - file: "A.t.m3v.dir.tar.gz"
     data_set_type: categorical
     label_start: 0
-  - file: "A.r.m1.dir.tar.gz"
+  - file: "A.r.m1v.dir.tar.gz"
     data_set_type: categorical
     label_start: 1
-  - file: "A.r.m2.dir.tar.gz"
+  - file: "A.r.m2v.dir.tar.gz"
     data_set_type: categorical
     label_start: 1
-  - file: "A.r.m3.dir.tar.gz"
+  - file: "A.r.m3v.dir.tar.gz"
     data_set_type: categorical
     label_start: 1
-  - file: "A.i.m1.dir.tar.gz"
+  - file: "A.i.m1v.dir.tar.gz"
     data_set_type: categorical
     label_start: 2
-  - file: "A.i.m2.dir.tar.gz"
+  - file: "A.i.m2v.dir.tar.gz"
     data_set_type: categorical
+    image_file_name: m1v.dir/2dft.dat
+    label_file_name: m1v.dir/2dftn1.dat
     label_start: 2
-  - file: "A.i.m3.dir.tar.gz"
+  - file: "A.i.m3v.dir.tar.gz"
     data_set_type: categorical
+    image_file_name: m1v.dir/2dft.dat
+    label_file_name: m1v.dir/2dftn1.dat
     label_start: 2
   
 # Model training configuration
@@ -53,6 +57,6 @@ data_num_classes: 3
 
 model_type: 1_channel
 model_directory: models
-model_name: 1_1-TID-RPS-ISO-m3
+model_name: 1_channel_gass_kinematics_TRI_m3
 
 log_dir: "logs/fit"
