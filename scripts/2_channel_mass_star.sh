@@ -8,4 +8,4 @@
 
 cd ~/GalaxyEnvironmentAnalysis
 source env/bin/activate
-python gea.py --debug train config/1.0-2_channel_mass_star.yml --new-model
+python gea.py --debug train config/1.1-2_channel_mass_star.yml --new-model
