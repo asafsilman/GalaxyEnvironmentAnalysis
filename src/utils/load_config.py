@@ -5,7 +5,7 @@ import yaml
 def load_config(config_path):
     path = pathlib.Path(config_path)
 
-    if path.is_file():
+    if path.is_file() and path.exists():
         if path.suffix == ".json":
             with open(path) as f:
                 return json.load(f)
