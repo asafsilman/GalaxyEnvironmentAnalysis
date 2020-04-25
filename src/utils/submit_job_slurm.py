@@ -44,6 +44,7 @@ def get_slurm_script(model_name, mem_limit_gb=40, partition="mlgpu", project_dir
     return SLURM_SCRIPT_TEMPLATE.format(
         model_name,
         mem_limit_gb,
+        partition,
         project_directory,
         training_command,
         running_jobs
