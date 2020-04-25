@@ -39,7 +39,7 @@ def get_job_dependencies_on_partition(partition):
     if jobs:
         return "#SBATCH -d afterok:" + ",".join(jobs)
     else:
-        return "#SBATCH -C \"\""
+        return "#SBATCH --comment=\" \""
 
 def get_slurm_script(model_name, mem_limit_gb=40, partition="mlgpu", project_directory="~/GalaxyEnvironmentAnalysis"):
     training_command = get_training_command(model_name)
