@@ -2,8 +2,7 @@ import os
 from subprocess import check_output, Popen, PIPE, STDOUT
 
 SLURM_SCRIPT_TEMPLATE = \
-"""
-#!/bin/sh
+"""#!/bin/sh
 #SBATCH -N 1      # nodes requested
 #SBATCH -n 1      # tasks requested
 #SBATCH --mem={1}G  # memory in Mb
@@ -30,7 +29,7 @@ def jobs_running_on_partition(partition):
     output = check_output(command).decode().split("\n")
     return list(
         map(
-            lambda x: int(x.replace("\"", "")),
+            lambda x: x.replace("\"", ""),
             filter(
                 lambda x: x!="", output
             )
@@ -39,7 +38,7 @@ def jobs_running_on_partition(partition):
 
 def get_slurm_script(model_name, mem_limit_gb=40, partition="mlgpu", project_directory="~/GalaxyEnvironmentAnalysis"):
     training_command = get_training_command(model_name)
-    running_jobs = ",".join(jobs_running_on_partition(partition))
+    running_jobs = ",".join(jobs_running_on_partition(partition) or [0])
     
     return SLURM_SCRIPT_TEMPLATE.format(
         model_name,
