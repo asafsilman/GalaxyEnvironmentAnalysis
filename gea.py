@@ -100,7 +100,7 @@ def train(ctx, config_file, new_model, save_training):
 @click.argument('job-memory', default=40, type=click.INT)
 @click.argument('job-partition', default="mlgpu", type=click.STRING)
 @click.argument('job-project-dir', default="~/GalaxyEnvironmentAnalysis", type=click.STRING)
-def submit_job_slurm(ctx, model_name, job_memory, job_parition, job_project_dir):
+def submit_job(ctx, model_name, job_memory, job_parition, job_project_dir):
     submit_job_slurm(
         model_name,
         mem_limit_gb=job_memory,
