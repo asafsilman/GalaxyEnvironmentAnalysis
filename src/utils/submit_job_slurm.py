@@ -55,7 +55,10 @@ def submit_job_slurm(model_name, **kwargs):
     
     p = Popen(["sbatch"], stdout=PIPE, stdin=PIPE, stderr=STDOUT)
     output = p.communicate(input=script.encode())[0]
-    if output:
+
+    return_code = p.wait()
+    if return_code:
         return True
     else:
+        print(output.decode())
         return False
