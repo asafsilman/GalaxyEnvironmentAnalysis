@@ -9,7 +9,7 @@ SLURM_SCRIPT_TEMPLATE = \
 #SBATCH --partition={2}
 #SBATCH -o outfile-{0}  # send stdout to outfile
 #SBATCH -e errfile-{0}  # send stderr to errfile
-#SBATCH -d afterok:{5}
+{5} # dependencies
 #SBATCH -J gea-training
 
 cd {3}
@@ -20,7 +20,7 @@ source env/bin/activate
 def get_training_command(model_name):
     return f"python gea.py --debug train config/{model_name}.yml --new-model"
 
-def jobs_running_on_partition(partition):
+def get_job_dependencies_on_partition(partition):
     command = [
         "squeue",
         "--noheader",
@@ -28,7 +28,7 @@ def jobs_running_on_partition(partition):
         "--format=\"%i\""
     ]
     output = check_output(command).decode().split("\n")
-    return list(
+    jobs =  list(
         map(
             lambda x: x.replace("\"", ""),
             filter(
@@ -36,10 +36,14 @@ def jobs_running_on_partition(partition):
             )
         )
     )
+    if jobs:
+        return "#SBATCH -d afterok:" + ",".join(jobs)
+    else:
+        return "#SBATCH -C \"\""
 
 def get_slurm_script(model_name, mem_limit_gb=40, partition="mlgpu", project_directory="~/GalaxyEnvironmentAnalysis"):
     training_command = get_training_command(model_name)
-    running_jobs = ",".join(jobs_running_on_partition(partition) or [0])
+    running_jobs = get_job_dependencies_on_partition(partition)
     
     return SLURM_SCRIPT_TEMPLATE.format(
         model_name,
