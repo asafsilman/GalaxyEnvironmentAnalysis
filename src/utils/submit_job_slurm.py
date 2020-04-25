@@ -10,6 +10,7 @@ SLURM_SCRIPT_TEMPLATE = \
 #SBATCH -o outfile-{0}  # send stdout to outfile
 #SBATCH -e errfile-{0}  # send stderr to errfile
 #SBATCH -d afterok:{5}
+#SBATCH -J gea-training
 
 cd {3}
 source env/bin/activate
