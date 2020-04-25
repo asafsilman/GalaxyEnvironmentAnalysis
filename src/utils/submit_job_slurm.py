@@ -57,7 +57,7 @@ def submit_job_slurm(model_name, **kwargs):
     output = p.communicate(input=script.encode())[0]
 
     return_code = p.wait()
-    if return_code:
+    if return_code == 0:
         return True
     else:
         print(output.decode())
