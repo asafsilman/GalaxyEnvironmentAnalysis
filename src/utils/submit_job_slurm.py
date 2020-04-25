@@ -9,7 +9,7 @@ SLURM_SCRIPT_TEMPLATE = \
 #SBATCH --partition={2}
 #SBATCH -o outfile-{0}  # send stdout to outfile
 #SBATCH -e errfile-{0}  # send stderr to errfile
-{5} # dependencies
+{5}
 #SBATCH -J gea-training
 
 cd {3}
