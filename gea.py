@@ -3,6 +3,7 @@ from pathlib import Path
 
 import click
 from src.utils.load_config import load_config
+from src.utils.submit_job_slurm import submit_job_slurm
 from src.utils.rm_tree import rm_tree
 
 from src.data.make_data_set import make_data_set
@@ -93,6 +94,19 @@ def train(ctx, config_file, new_model, save_training):
     config = load_config(click.format_filename(config_file))
     train_model(config, new_model, save_training)
 
+@cli.command()
+@click.pass_context
+@click.argument('model-name', type=click.STRING)
+@click.argument('job-memory', default=40, type=click.INT)
+@click.argument('job-partition', default="mlgpu", type=click.STRING)
+@click.argument('job-project-dir', default="~/GalaxyEnvironmentAnalysis", type=click.STRING)
+def submit_job_slurm(ctx, model_name, job_memory, job_parition, job_project_dir):
+    submit_job_slurm(
+        model_name,
+        mem_limit_gb=job_memory,
+        partition=job_parition,
+        project_directory=job_project_dir
+    )
 
 if __name__ == '__main__':
     cli(obj={})
