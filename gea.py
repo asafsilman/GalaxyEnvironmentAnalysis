@@ -10,6 +10,10 @@ from src.data.split_data_set import split_data_set
 from src.data.move_data import move_data
 from src.models.train_model import train_model
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 logger = logging.getLogger(__name__)
 
 @click.group()
