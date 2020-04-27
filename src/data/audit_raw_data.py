@@ -48,8 +48,7 @@ def sha256sum(filename):
             h.update(mv[:n])
     return h.hexdigest()
 
-def data_files_df_to_dict(data_files_df):
-    return data_files_df.to_dict(orient="index")
+
 
 def audit_single_file(data_files_dict, config, data_id):
     data_file = data_files_dict.get(data_id)
@@ -158,7 +157,6 @@ if __name__=="__main__":
     from src.config.load_workbook import load_workbook
     config = {"model_config_path": "model_config.xlsx"}
     _, data_files = load_workbook(config)
-    data_files = data_files_df_to_dict(data_files)
     generate_file_catalog(data_files, config)
 
     # audit_single_file(data_files, config, 23)
