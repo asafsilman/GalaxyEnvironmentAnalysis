@@ -10,9 +10,9 @@ from src.utils.rm_tree import rm_tree
 from src.data.make_data_set import make_data_set
 from src.data.split_data_set import split_data_set
 from src.data.move_data import move_data
-from src.data.audit_raw_data import data_files_df_to_dict, generate_file_catalog, audit_all_files
+from src.data.audit_raw_data import generate_file_catalog, audit_all_files
 
-from src.models.train_model import train_model
+from src.model.train_model import train_model
 
 from dotenv import load_dotenv
 
@@ -117,8 +117,7 @@ def submit_job(ctx, model_name, job_memory, job_partition, job_project_dir):
 @click.pass_context
 @click.argument('out-file', default="out.csv", type=click.Path(dir_okay=False))
 def audit(ctx, out_file):
-    _, data_workbook = load_workbook(root_config)
-    data_files_dictionary = data_files_df_to_dict(data_workbook)
+    _, data_files_dictionary = load_workbook(root_config)
     audit_all_files(data_files_dictionary, root_config, out_file)
 
 @cli.command()
@@ -127,8 +126,7 @@ def audit(ctx, out_file):
 @click.option('--extract-files/--no-extract-files', default=True)
 @click.argument('out-file', default="out.csv", type=click.Path(dir_okay=False))
 def catalog(ctx, data_id, extract_files, out_file):
-    _, data_workbook = load_workbook(root_config)
-    data_files_dictionary = data_files_df_to_dict(data_workbook)
+    _, data_files_dictionary = load_workbook(root_config)
     generate_file_catalog(data_files_dictionary, root_config, data_id, extract_files, out_file)
 
 if __name__ == '__main__':
