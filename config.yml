@@ -1,0 +1,22 @@
+# Model config
+image_height: 50
+image_width: 50
+
+# Data config
+data_train_split: 0.8
+data_validation_split: 0.8
+data_batch_size: 32
+
+# Training Config
+epochs: 1000
+enable_tensorboard: True
+enable_earlystopping: False
+
+# System config
+data_raw_path: "data/raw"
+data_interim_path: "data/interim"
+data_processed_path: "data/processed"
+model_path: models
+log_path: "logs/fit"
+
+model_config_path: "model_config.xlsx"

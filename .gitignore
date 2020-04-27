@@ -19,6 +19,7 @@ __pycache__/
 logs/*
 models/*.json
 ~$*.xls*
+out.csv
 
 # LaTex files
 reports/*.aux

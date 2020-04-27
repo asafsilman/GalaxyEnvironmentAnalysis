@@ -16,4 +16,3 @@ def load_config(config_path):
             raise ValueError(f"Config file extension not accepted.")
     else:
         raise FileNotFoundError(f"Config file not found. Path={config_path}")
-
