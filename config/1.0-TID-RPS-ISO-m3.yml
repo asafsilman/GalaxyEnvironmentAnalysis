@@ -39,6 +39,12 @@ data_files:
   - file: "A.i.m1.dir.tar.gz"
     data_set_type: categorical
     label_start: 2
+  - file: "A.i.m2.dir.tar.gz"
+    data_set_type: categorical
+    label_start: 2
+  - file: "A.i.m3.dir.tar.gz"
+    data_set_type: categorical
+    label_start: 2
   
 # Model training configuration
 data_train_split: 0.8
