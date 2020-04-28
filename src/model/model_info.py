@@ -31,7 +31,7 @@ class ModelInfo:
     def _get_data_sets_info(self):
         data_sets = map(lambda x: (x, self.model_config[f"dataSet_{x}"]), AVAILABLE_DATASETS)
         
-        return {d[0]:d[1] for d in data_sets}
+        return [d[0] for d in data_sets if d[1]]
 
     def _get_channels_info(self):
         channels = list(
@@ -43,7 +43,7 @@ class ModelInfo:
         return channels
 
     def get_model_data_files(self):
-        data_sets = list(filter(lambda x: self.model_data_sets[x]==True, self.model_data_sets))
+        data_sets = self.model_data_sets
 
         filter_function = lambda x: \
             self.data_files_dict[x]["dataSetLabel"] in data_sets and \
