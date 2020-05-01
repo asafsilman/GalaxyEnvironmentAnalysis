@@ -13,6 +13,11 @@ from src.data.move_data import move_data
 from src.data.audit_raw_data import generate_file_catalog, audit_all_files
 
 from src.model.train_model import train_model
+from src.model.model_info import ModelInfo
+from src.model.run_model_experiment import run_model_experiment
+from src.data.model_data_set import ModelDataset
+from src.model.galaxy_model import GalaxyModelClassifier
+
 
 from dotenv import load_dotenv
 
@@ -54,14 +59,15 @@ def clean(ctx, all_files):
         logger.info(f'Cleaning {models_directory} directory')
         rm_tree(models_directory)
 
-
+# depreicate
 @cli.command()
 @click.pass_context
 @click.argument('config-file', type=click.Path(exists=True))
 def data_prep(ctx, config_file):
     config = load_config(click.format_filename(config_file))
     make_data_set(config)
-    
+
+# depreicate
 @cli.command()
 @click.pass_context
 @click.argument('config-file', type=click.Path(exists=True))
@@ -70,6 +76,7 @@ def data_split(ctx, config_file, seed):
     config = load_config(click.format_filename(config_file))
     split_data_set(config, seed)
 
+# depreicate
 @cli.command()
 @click.pass_context
 @click.argument('config-file', type=click.Path(exists=True))
@@ -128,6 +135,28 @@ def audit(ctx, out_file):
 def catalog(ctx, data_id, extract_files, out_file):
     _, data_files_dictionary = load_workbook(root_config)
     generate_file_catalog(data_files_dictionary, root_config, data_id, extract_files, out_file)
+
+@cli.command()
+@click.pass_context
+@click.argument('model-name', type=click.STRING)
+def prepare_data(ctx, model_name):
+    model_config_dictionary, data_files_dictionary = load_workbook(root_config)
+    model_info = ModelInfo(model_name, model_config_dictionary, data_files_dictionary)
+
+    model_data_set = ModelDataset(model_info, root_config)
+
+    model_data_set.create_model_data_set()
+
+@cli.command()
+@click.pass_context
+@click.argument('model-name', type=click.STRING)
+def run_experiment(ctx, model_name):
+    model_config_dictionary, data_files_dictionary = load_workbook(root_config)
+    model_info = ModelInfo(model_name, model_config_dictionary, data_files_dictionary)
+
+    model = GalaxyModelClassifier(model_info, root_config)
+
+    run_model_experiment(model, root_config)
 
 if __name__ == '__main__':
     cli(obj={})
