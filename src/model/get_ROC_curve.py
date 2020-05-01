@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import io
 import tempfile
 
-from sklearn.metrics import auc, confusion_matrix, roc_auc_score, roc_curve
+from sklearn.metrics import auc, roc_auc_score, roc_curve
 from scipy import interp
 
 import numpy as np
@@ -67,7 +67,7 @@ def get_ROC_curve(predict_scores, correct_scores):
                 ''.format(roc_auc["macro"]),
             color='navy', linestyle=':', linewidth=4)
 
-    labels = sorted(DATA_LABELS.values())
+    labels = sorted(DATA_LABELS.keys())
     colors = cycle(['aqua', 'darkorange', 'cornflowerblue'])
     for i, color in zip(range(n_classes), colors):
         plt.plot(fpr[i], tpr[i], color=color, lw=lw,

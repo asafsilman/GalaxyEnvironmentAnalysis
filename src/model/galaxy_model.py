@@ -14,6 +14,7 @@ from tensorflow.keras.optimizers import Adadelta
 from src.data.model_data_set import ModelDataset
 from src.model.model_constants import DATA_LABELS
 from src.model.get_ROC_curve import get_ROC_curve
+from src.model.get_confusion_matrix import get_confusion_matrix
 
 logger = logging.getLogger(__name__)
 
@@ -143,11 +144,16 @@ class GalaxyModelClassifier(GalaxyModel):
             raise ValueError("No model is defined")
 
         predict, predict_scores, correct, correct_scores = self._get_predictions(testing_data_set)
+        breakpoint()
 
         ROC_curve = get_ROC_curve(predict_scores, correct_scores)
+        conf_mtrx = get_confusion_matrix(predict, correct)
 
-        ex.add_artifact(ROC_curve.name, name="ROC_Curve.png")
+        ex.add_artifact(ROC_curve.name, name="ROC_Curve.png", content_type="image/png")
+        ex.add_artifact(conf_mtrx.name, name="Confusion_Matrix.png", content_type="image/png")
+
         ROC_curve.close()
+        conf_mtrx.close()
 
 if __name__=="__main__":
     from src.config.load_workbook import load_workbook

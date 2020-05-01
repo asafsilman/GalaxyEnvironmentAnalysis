@@ -29,7 +29,7 @@ ex.add_config(config)
 @LogFileWriter(ex)
 def main(_run):
     
-    config["epochs"] = 5
+    config["epochs"] = 50
     model_config_dict, data_files_dict = load_workbook(config)
 
     model_info = ModelInfo(model_name, model_config_dict, data_files_dict)
@@ -52,16 +52,7 @@ def main(_run):
             for metric, val in logs.items():
                 self.run.log_scalar(metric, val, epoch)
     
-    # history = m.train(tr, v, [CustomCallback(_run)])
+    history = m.train(tr, v, [CustomCallback(_run)])
 
     m.save_model()
     m.evaluate_model(t, ex)
-
-    # import numpy as np
-    # from PIL import Image
-
-    # arr = np.random.randint(0,255,(100,100,3))
-    # im = Image.fromarray(arr,'RGB')
-    # out_path = "out.png"
-    # im.save(out_path)
-    # _run.add_artifact(out_path)
