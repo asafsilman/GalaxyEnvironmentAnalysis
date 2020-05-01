@@ -103,18 +103,7 @@ def train_model(config, new_model: bool, save_model_flag: bool):
             tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=5)
         )
 
-    try:
-        model.fit(
-            train_data_set,
-            steps_per_epoch=50,
-            epochs=epochs,
-            validation_data=validation_data_set,
-            validation_steps=50,
-            verbose=1,
-            callbacks=callbacks
-        )
-    except KeyboardInterrupt:
-        logger.error('Got Keyboard Interupt, stopping training')
+    
 
     if save_model_flag:
         logger.info(f"Saving model as {model_name}")

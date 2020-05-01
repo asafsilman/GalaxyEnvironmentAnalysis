@@ -1,3 +1,5 @@
+# Depricated
+
 import logging
 import tarfile
 from hashlib import sha1
