@@ -144,7 +144,6 @@ class GalaxyModelClassifier(GalaxyModel):
             raise ValueError("No model is defined")
 
         predict, predict_scores, correct, correct_scores = self._get_predictions(testing_data_set)
-        breakpoint()
 
         ROC_curve = get_ROC_curve(predict_scores, correct_scores)
         conf_mtrx = get_confusion_matrix(predict, correct)
