@@ -1,16 +1,19 @@
-from pathlib import Path
+import logging
 from datetime import datetime
+from pathlib import Path
 
+import numpy as np
+import matplotlib.pyplot as plt
 import tensorflow as tf
-from tensorflow.keras.models import Sequential, model_from_json
-from tensorflow.keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D
+from tensorflow.keras.layers import (Conv2D, Dense, Dropout, Flatten,
+                                     MaxPooling2D)
 from tensorflow.keras.metrics import CosineSimilarity
+from tensorflow.keras.models import Sequential, model_from_json
 from tensorflow.keras.optimizers import Adadelta
 
 from src.data.model_data_set import ModelDataset
 from src.model.model_constants import DATA_LABELS
-
-import logging
+from src.model.get_ROC_curve import get_ROC_curve
 
 logger = logging.getLogger(__name__)
 
@@ -118,6 +121,33 @@ class GalaxyModelClassifier(GalaxyModel):
             optimizer=Adadelta(),
             metrics=['MSE', 'accuracy', 'AUC']
         )
+
+    def _get_predictions(self, testing_data_set):
+        predict, correct = [], []
+        predict_scores, correct_scores = [], []
+        
+        for image, label in testing_data_set:
+            predictions = self.model.predict(image)
+
+            for i in range(predictions.shape[0]):
+                predict.append(np.argmax(predictions[i]))
+                correct.append(np.argmax(label[i]))
+
+                predict_scores.append(predictions[i])
+                correct_scores.append(label[i])
+
+        return (predict, predict_scores, correct, correct_scores)
+
+    def evaluate_model(self, testing_data_set, ex):
+        if self.model is None:
+            raise ValueError("No model is defined")
+
+        predict, predict_scores, correct, correct_scores = self._get_predictions(testing_data_set)
+
+        ROC_curve = get_ROC_curve(predict_scores, correct_scores)
+
+        ex.add_artifact(ROC_curve.name, name="ROC_Curve.png")
+        ROC_curve.close()
 
 if __name__=="__main__":
     from src.config.load_workbook import load_workbook

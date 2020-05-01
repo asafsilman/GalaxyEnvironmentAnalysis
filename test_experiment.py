@@ -52,9 +52,10 @@ def main(_run):
             for metric, val in logs.items():
                 self.run.log_scalar(metric, val, epoch)
     
-    history = m.train(tr, v, [CustomCallback(_run)])
+    # history = m.train(tr, v, [CustomCallback(_run)])
 
     m.save_model()
+    m.evaluate_model(t, ex)
 
     # import numpy as np
     # from PIL import Image
