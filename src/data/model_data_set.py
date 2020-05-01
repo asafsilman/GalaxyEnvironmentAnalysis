@@ -192,19 +192,20 @@ class ModelDataset:
             else:
                 raise NotImplementedError
 
-        def _prep_data_set(data_set):
+        def _prep_data_set(data_set, repeat=True):
             batch_size = self.config.get("data_batch_size", 32)
 
             data_set = data_set.map(_parse_data_function)
             data_set = data_set.map(_parse_data)
-            data_set = data_set.repeat()
+            if repeat:
+                data_set = data_set.repeat()
             data_set = data_set.shuffle(500)
             data_set = data_set.batch(batch_size)
             data_set = data_set.prefetch(buffer_size=AUTOTUNE)
 
             return data_set
         
-        test =  _prep_data_set(_read_data_set(str(data_dirs["processed"]/f"{model_name}.test.tfrecords")))
+        test =  _prep_data_set(_read_data_set(str(data_dirs["processed"]/f"{model_name}.test.tfrecords")), repeat=False)
         train = _prep_data_set(_read_data_set(str(data_dirs["processed"]/f"{model_name}.train.tfrecords")))
         valid = _prep_data_set(_read_data_set(str(data_dirs["processed"]/f"{model_name}.validation.tfrecords")))
 
