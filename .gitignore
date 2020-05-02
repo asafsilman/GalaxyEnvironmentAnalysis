@@ -17,9 +17,9 @@ __pycache__/
 *.png
 *.jpg
 logs/*
-models/*.json
+models/**/*
 ~$*.xls*
-out.csv
+out.*
 *.tfrecords
 
 # LaTex files
