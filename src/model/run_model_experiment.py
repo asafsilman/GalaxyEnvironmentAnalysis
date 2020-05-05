@@ -2,6 +2,7 @@ import tensorflow as tf
 from sacred import Experiment
 from sacred.observers import MongoObserver
 
+from pathlib import Path
 import os
 
 class CustomCallback(tf.keras.callbacks.BaseLogger):
@@ -15,6 +16,15 @@ class CustomCallback(tf.keras.callbacks.BaseLogger):
         for metric, val in logs.items():
             self.run.log_scalar(metric, val, epoch)
 
+def add_model_files_to_experiment(model, ex):
+    model_directory = model.config["model_path"]
+    model_name = model.model_info.model_name
+
+    save_path = Path(model_directory) / model_name
+
+    for file in save_path.glob("**/*.*"):
+        ex.add_artifact(file)
+
 
 def run_model_experiment(model, config):
     mo = MongoObserver.create(url=os.environ.get("MONGO_CONNECTION_STRING"), db_name="db")
@@ -24,8 +34,6 @@ def run_model_experiment(model, config):
 
     ex.add_config(config)
 
-
-
     @ex.automain
     def main(_run):
         model.get_new_model()
@@ -33,9 +41,15 @@ def run_model_experiment(model, config):
         
         test, train, validate = model.model_data_set.load_model_data_set()
  
-        history = model.train(train, validate, [CustomCallback(_run)])
+        try:
+            model.train(train, validate, [CustomCallback(_run)])
+        except KeyboardInterrupt:
+            print("Stopped Training")
 
         model.save_model()
+
         model.evaluate_model(test, ex)
+
+        add_model_files_to_experiment(model, ex)
 
     ex.run()

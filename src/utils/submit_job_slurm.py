@@ -18,7 +18,7 @@ source env/bin/activate
 """
 
 def get_training_command(model_name):
-    return f'python gea.py run_experiment "{model_name}"'
+    return f'python gea.py run-experiment "{model_name}"'
 
 def get_job_dependencies_on_partition(partition):
     command = [
