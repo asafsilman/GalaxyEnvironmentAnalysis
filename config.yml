@@ -16,7 +16,7 @@ enable_earlystopping: False
 data_raw_path: "data/raw"
 data_interim_path: "data/interim"
 data_processed_path: "data/processed"
-model_path: models
+model_path: "models"
 log_path: "logs/fit"
 
 model_config_path: "model_config.xlsx"

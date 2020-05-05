@@ -1,15 +1,20 @@
+"""The purpose of this module is to load the configuration for a model from the
+configuration excel workbook, in addition to the associated datafiles for the model.
+"""
+
 from src.model.model_constants import *
 import pandas as pd
 
 class ModelInfo:
     def __init__(self, model_name, model_config_dict, data_files_dict):
-        self.model_name = model_name
-        self.model_config_dict = model_config_dict
-        self.data_files_dict = data_files_dict
+        self.model_name = model_name # The name of the model
 
-        self.model_config = self._get_model_config()
-        self.model_data_sets = self._get_data_sets_info()
-        self.model_channels = self._get_channels_info()
+        self.model_config_dict = model_config_dict # The whole model config dictionary
+        self.data_files_dict = data_files_dict # The whole data file config dictionary
+
+        self.model_config = self._get_model_config() # The config for the specific model
+        self.model_data_sets = self._get_data_sets_info() # The datasets for the model
+        self.model_channels = self._get_channels_info() # A list of channels the model will use
 
     def _get_model_config(self):
         filter_function = lambda x: \

@@ -7,15 +7,11 @@ from src.config.load_workbook import load_workbook
 from src.utils.submit_job_slurm import submit_job_slurm
 from src.utils.rm_tree import rm_tree
 
-from src.data.make_data_set import make_data_set
-from src.data.split_data_set import split_data_set
-from src.data.move_data import move_data
 from src.data.audit_raw_data import generate_file_catalog, audit_all_files
+from src.data.model_data_set import ModelDataset
 
-from src.model.train_model import train_model
 from src.model.model_info import ModelInfo
 from src.model.run_model_experiment import run_model_experiment
-from src.data.model_data_set import ModelDataset
 from src.model.galaxy_model import GalaxyModelClassifier
 
 
@@ -58,53 +54,6 @@ def clean(ctx, all_files):
 
         logger.info(f'Cleaning {models_directory} directory')
         rm_tree(models_directory)
-
-# depreicate
-@cli.command()
-@click.pass_context
-@click.argument('config-file', type=click.Path(exists=True))
-def data_prep(ctx, config_file):
-    config = load_config(click.format_filename(config_file))
-    make_data_set(config)
-
-# depreicate
-@cli.command()
-@click.pass_context
-@click.argument('config-file', type=click.Path(exists=True))
-@click.argument('seed', default=None, required=False)
-def data_split(ctx, config_file, seed):
-    config = load_config(click.format_filename(config_file))
-    split_data_set(config, seed)
-
-# depreicate
-@cli.command()
-@click.pass_context
-@click.argument('config-file', type=click.Path(exists=True))
-@click.argument('directory', required=False, default="data/processed/test", type=click.Path())
-def data_move(ctx, config_file, directory):
-    config = load_config(click.format_filename(config_file))
-    directory = Path(directory)
-    directory.mkdir(exist_ok=True)
-    move_data(config, directory)
-    
-
-@cli.command()
-@click.pass_context
-@click.argument('config-file', type=click.Path(exists=True))
-@click.argument('seed', default=None, required=False)
-def data_prep_split(ctx, config_file, seed):
-    config = load_config(click.format_filename(config_file))
-    make_data_set(config)
-    split_data_set(config, seed)
-
-@cli.command()
-@click.pass_context
-@click.argument('config-file', type=click.Path(exists=True))
-@click.option('--new-model/--load-model', default=False)
-@click.option('--save-training/--discard-training', default=True)
-def train(ctx, config_file, new_model, save_training):
-    config = load_config(click.format_filename(config_file))
-    train_model(config, new_model, save_training)
 
 @cli.command()
 @click.pass_context
