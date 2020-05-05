@@ -7,7 +7,6 @@ This repository contains the codebase for analysing the surrounding environment 
 The structure of the project is based on [This Project](https://drivendata.github.io/cookiecutter-data-science/#data-is-immutable)
 
 ```
-├── config
 ├── data
 │   ├── raw
 │   ├── interim 
@@ -16,7 +15,6 @@ The structure of the project is based on [This Project](https://drivendata.githu
 ├── models
 ├── notebooks
 ├── reports
-├── scripts
 ├── src
 ├── gea.py
 └── README.md
@@ -32,7 +30,6 @@ Any jupyter notebooks which are mainly used for experimentation and generating v
 
 Reports such as the research proposal and thesis paper are stored under `reports/`.
 
-Scripts for executing training jobs on SLURM workload manager are stored under `scripts/`
 
 The source code is stored under `src/`
 
@@ -42,12 +39,7 @@ The cli tool can be helpful in automating most of the project tasks, such as dat
 
 **Cleanup project directories:** `python gea.py clean`
 
-**Prepare data from config:** `python gea.py data-prep <config_file.yml>`
+**Prepare data from config:** `python gea.py prepare_data <modelname>`
 
-**Split data from config:** `python gea.py data-split <config_file.yml>`
+**Prepare and split data from config** `python gea.py run-experiment <modelname>`
 
-**Prepare and split data from config** `python gea.py data-prep-split <config_file.yml>`
-
-For training models, you can train an existing model, or create a new model by specifying the option `--new-model`. (Default is to load a model)
-
-`python gea.py train <config_file.yml> --new-model`
