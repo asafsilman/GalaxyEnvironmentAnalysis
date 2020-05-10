@@ -12,7 +12,7 @@ import numpy as np
 
 plt.ioff()
 
-def get_ROC_curve(predict_scores, correct_scores):
+def get_ROC_curve(predict_scores, correct_scores, return_fig=False):
     fpr = dict()
     tpr = dict()
     roc_auc = dict()
@@ -82,7 +82,10 @@ def get_ROC_curve(predict_scores, correct_scores):
     plt.title('Some extension of Receiver operating characteristic to multi-class')
     plt.legend(loc="lower right")
 
-    fo = tempfile.NamedTemporaryFile("w+")
+    if return_fig:
+        return plt
+    else:
+        fo = tempfile.NamedTemporaryFile("w+")
 
-    plt.savefig(fo.name, format="png")
-    return fo
+        plt.savefig(fo.name, format="png")
+        return fo

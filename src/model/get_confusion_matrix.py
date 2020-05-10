@@ -6,7 +6,7 @@ from sklearn.metrics import confusion_matrix
 import numpy as np
 import tempfile
 
-def get_confusion_matrix(predict, correct):
+def get_confusion_matrix(predict, correct, return_fig=False):
     labels = sorted(DATA_LABELS.keys())
     n_classes = len(DATA_LABELS)
     conf_mtrx = confusion_matrix(correct, predict, [i for i in range(n_classes)])
@@ -31,9 +31,11 @@ def get_confusion_matrix(predict, correct):
 
 
     plt.title("Confusion Matirx of Model")
+    if return_fig:
+        return plt
+    else:
+        fo = tempfile.NamedTemporaryFile("w+")
 
-    fo = tempfile.NamedTemporaryFile("w+")
-
-    plt.savefig(fo.name, format="png")
-    return fo
+        plt.savefig(fo.name, format="png")
+        return fo
     

@@ -64,7 +64,22 @@ class ModelDataset:
         
         return groups
 
-    def create_model_data_set(self):
+    def extract_files_from_archive(self, data_file, num_rows, image_height, image_width):
+        data_dirs = self._get_data_root_dirs()
+        data_file_path = data_dirs["raw"].joinpath(data_file["dataFile"])
+
+        with tarfile.open(data_file_path) as archive:
+            image_file_name = archive.extractfile(data_file["imageFileName"])
+            label_file_name = archive.extractfile(data_file["labelFileName"])
+            
+            image_data = np.loadtxt(image_file_name, dtype=np.float32)
+            label_data = np.loadtxt(label_file_name, dtype=np.float32)
+
+            image_data = image_data.reshape(num_rows, image_height, image_width)
+
+            return image_data, label_data
+
+    def create_model_data_set(self, single_output=False):
         data_dirs = self._get_data_root_dirs()
         rm_tree(data_dirs["interim"])
 
@@ -80,28 +95,40 @@ class ModelDataset:
         # Load files
         model_data_files = self.model_info.get_model_data_files()
         
+        # Get data groups
+        # A group is all the channel files for each data set, and label
         data_groups = self._get_data_groups(model_data_files)
         num_groups = len(data_groups)
-
         
         options = tf.io.TFRecordOptions(compression_type="GZIP")
-        data_sets_writers = {
-            "test": tf.io.TFRecordWriter(
-                str(data_dirs["processed"]/f"{model_name}.test.tfrecords"),
-                options=options
-            ),
-            "train": tf.io.TFRecordWriter(
-                str(data_dirs["processed"]/f"{model_name}.train.tfrecords"),
-                options=options
-            ),
-            "validation": tf.io.TFRecordWriter(
-                str(data_dirs["processed"]/f"{model_name}.validation.tfrecords"),
-                options=options
-            )
-        }
+        
+        if single_output:
+            data_sets_writers = {
+                "output": tf.io.TFRecordWriter(
+                    str(data_dirs["processed"]/f"{model_name}.tfrecords"),
+                    options=options
+                )
+            }
+        else:
+            data_sets_writers = {
+                "test": tf.io.TFRecordWriter(
+                    str(data_dirs["processed"]/f"{model_name}.test.tfrecords"),
+                    options=options
+                ),
+                "train": tf.io.TFRecordWriter(
+                    str(data_dirs["processed"]/f"{model_name}.train.tfrecords"),
+                    options=options
+                ),
+                "validation": tf.io.TFRecordWriter(
+                    str(data_dirs["processed"]/f"{model_name}.validation.tfrecords"),
+                    options=options
+                )
+            }
         
         for group_i, data_group in enumerate(data_groups):
-            logger.info(f"Processing group {group_i}/{num_groups}")
+            if len(data_group) != len(self.model_info.model_channels):
+                logger.warning(f"Skipping group {group_i+1}/{num_groups}. Number of files != Number of channels")
+            logger.info(f"Processing group {group_i+1}/{num_groups}")
 
             group_image_data = []
             group_label_data = []
@@ -109,36 +136,34 @@ class ModelDataset:
             num_rows = int(data_group[0]["imageFileNumRows"])
             class_label = data_group[0]["dataLabel"]
             for data_file in data_group:
-                data_file_path = data_dirs["raw"].joinpath(data_file["dataFile"])
-                with tarfile.open(data_file_path) as archive:
-                    image_file_name = archive.extractfile(data_file["imageFileName"])
-                    label_file_name = archive.extractfile(data_file["labelFileName"])
-                    
-                    image_data = np.loadtxt(image_file_name, dtype=np.float32)
-                    label_data = np.loadtxt(label_file_name, dtype=np.float32)
+                image_data, label_data = self.extract_files_from_archive(data_file, num_rows, image_height, image_width)
 
-                    image_data = image_data.reshape(num_rows, image_height, image_width)
-
-                    group_image_data.append(image_data)
-                    group_label_data.append(label_data)
+                group_image_data.append(image_data)
+                group_label_data.append(label_data)
             
             image_channels_merged = np.stack(group_image_data, axis=-1)
             label_channels_merged = np.stack(group_label_data, axis=-1)
 
-            shuffled_index = [i for i in range(num_rows)]
+            shuffled_index = list(range(num_rows))
             shuffle(shuffled_index) # shuffled_index is now shuffled
             
             train, test = partition_list(shuffled_index, data_train_split)
             train, validate = partition_list(train, data_validation_split)
 
-            data_sets = [
-                ("train", train),
-                ("test", test),
-                ("validation", validate)
-            ]
+            if single_output:
+                data_sets = [
+                    ("output", shuffled_index)
+                ]
+            else:
+                data_sets = [
+                    ("train", train),
+                    ("test", test),
+                    ("validation", validate)
+                ]
 
             for data_set_type, indexes in data_sets:
                 writer = data_sets_writers[data_set_type]
+                
                 for i in indexes:
                     image = image_channels_merged[i]
                     label = label_channels_merged[i]
@@ -159,7 +184,7 @@ class ModelDataset:
         for writer in data_sets_writers.values():
             writer.close()
 
-    def load_model_data_set(self):
+    def load_model_data_set(self, single_output=False):
         data_dirs = self._get_data_root_dirs()
         model_name = self.model_info.model_name
 
@@ -205,11 +230,14 @@ class ModelDataset:
 
             return data_set
         
-        test =  _prep_data_set(_read_data_set(str(data_dirs["processed"]/f"{model_name}.test.tfrecords")), repeat=False)
-        train = _prep_data_set(_read_data_set(str(data_dirs["processed"]/f"{model_name}.train.tfrecords")))
-        valid = _prep_data_set(_read_data_set(str(data_dirs["processed"]/f"{model_name}.validation.tfrecords")))
-
-        return test, train , valid
+        if single_output:
+            return \
+                _prep_data_set(_read_data_set(str(data_dirs["processed"]/f"{model_name}.tfrecords")), repeat=False)
+        else:
+            test =  _prep_data_set(_read_data_set(str(data_dirs["processed"]/f"{model_name}.test.tfrecords")), repeat=False)
+            train = _prep_data_set(_read_data_set(str(data_dirs["processed"]/f"{model_name}.train.tfrecords")))
+            valid = _prep_data_set(_read_data_set(str(data_dirs["processed"]/f"{model_name}.validation.tfrecords")))
+            return test, train , valid
 
 if __name__=="__main__":
     from src.config.load_workbook import load_workbook

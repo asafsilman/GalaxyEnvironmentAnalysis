@@ -32,10 +32,11 @@ class GalaxyModel:
         raise NotImplementedError
 
     def load_model(self):
-        model_directory = self.config["model_path"]
+        model_directory = Path(self.config["model_path"])
         model_name = self.model_info.model_name
 
-        return  tf.keras.models.load_model(model_name)
+        self.model = tf.keras.models.load_model(str(model_directory/model_name))
+        return self.model
 
     def save_model(self):
         if self.model is None:
