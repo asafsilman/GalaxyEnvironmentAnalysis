@@ -55,6 +55,7 @@ def audit_single_file(data_files_dict, config, data_id):
     if data_file is None:
         raise Exception(f"Could not file dataId: {data_id}")
 
+    logger.info(f"Auditing dataID: {data_file['dataId']}")
     raw_data_path = Path(config.get("data_raw_path", "data/raw"))
     image_pixels = config.get("image_height", 50) * config.get("image_width", 50)
 
